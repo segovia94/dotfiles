@@ -1,0 +1,27 @@
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# PHPStorm
+.idea
+
+# SASS
+.sass-cache
+
+# Ignore Sass map files since they only work locally anyway
+*.css.map
+
+# Netbeans
+nbproject
+nbproject/*
+
+# Ignore any directories with a .local ending. This means it is a symbolic link to a local site
+*.local
