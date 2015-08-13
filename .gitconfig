@@ -23,10 +23,6 @@
 			git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
 		fi \
 	}; f"
-
-[url "git@github.com:segovia94/"]
-  insteadOf = "git://github.com/segovia94/"
-  insteadOf = "https://github.com/segovia94/"
 	
 [color]
 	ui = always
@@ -43,3 +39,10 @@
 	added = green
 	changed = yellow
 	untracked = red
+
+[push]
+	default = current
+
+[url "git@github.com:segovia94/"]
+	insteadOf = "git://github.com/segovia94/"
+	insteadOf = "https://github.com/segovia94/"
