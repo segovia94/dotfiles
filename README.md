@@ -3,6 +3,19 @@ Shell and Git configuration for better usability
 
 This is shamelessly based on Paul Irish's dotfiles https://github.com/paulirish/dotfiles
 
+## overview of files
+
+#### shell environment
+* `.aliases`
+* `.bash_profile`
+* `.bash_prompt`
+* `.functions`
+* `.extra` - not included, explained below
+
+#### git
+* `.gitconfig`
+* `.gitignore`
+
 ### `.extra` for private configuration
 
 There will be items that don't belong to be committed to a git repo, because either 1) it shoudn't be the same across your machines or 2) it shouldn't be in a git repo. Kick it off like this:
