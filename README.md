@@ -35,3 +35,10 @@ export PATH
 # Load RVM into a shell session *as a function*
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
 ```
+
+## Edit per environment
+The .bash_prompt file has a variable which needs to be changed per environment.
+
+`default_username='markmill'`
+
+This should be changed to whatever the default system username is.
