@@ -39,6 +39,6 @@ export PATH
 ## Edit per environment
 The .bash_prompt file has a variable which needs to be changed per environment.
 
-`default_username='markmill'`
+`default_username='Mark'`
 
 This should be changed to whatever the default system username is.
