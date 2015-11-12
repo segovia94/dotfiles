@@ -48,3 +48,6 @@ alias selenium_chrome='java -jar /Applications/selenium-server-standalone-2.45.0
 
 # Delete all node_module packages
 alias delete_npm='for package in `ls node_modules`; do sudo npm uninstall $package; done; sudo rm -rf node_modules/.bin' 
+
+# Drush
+alias drush8='~/.drush8/vendor/bin/drush'
