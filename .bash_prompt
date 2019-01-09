@@ -115,6 +115,12 @@ set_prompts() {
 
         return
     }
+    
+    # https://stackoverflow.com/questions/33712750/git-config-global-returns-syntax-error-near-unexpected-token-error
+    function echonewline() {
+        echo -e "\n "
+        # last line must be non-empty - I emit a whitespace
+    }
 
 
 
@@ -127,7 +133,7 @@ set_prompts() {
     PS1+="\[$(usernamehost)\]"                              # username at host
     PS1+="\[$green\]\w"                                     # working directory
     PS1+="\$(prompt_git \"$white on $purple\" \"$cyan\")"   # git repository details
-    PS1+="\n"
+    PS1+="\$(echonewline)"
     PS1+="\[$reset$white\]\\$ \[$reset\]"
 
     export PS1
