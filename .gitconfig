@@ -2,12 +2,18 @@
 
 [alias]
 	c = commit -am
-	up = pull
-	p = push
-	s = status -s
+	fpush = push --force
+	s = status
+	sclone = clone --depth=1
+	amend = commit --amend --all
+	undocommit = reset HEAD~
+	hreset = reset --hard
+	co = checkout
 	df = diff --color --color-words --abbrev
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-	co = checkout
+	cherrypick = cherry-pick
+	cherry = cherry-pick
+	cp = cherry-pick
 
 	# Show the diff between the latest commit and the current state
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
@@ -23,25 +29,37 @@
 			git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
 		fi \
 	}; f"
-	
+
 [color]
-	ui = always
-[color "branch"]
-	current = green
-	local = white
-	remote = red
+	ui = auto
 [color "diff"]
 	meta = yellow bold
-	frag = cyan
-	old = red
-	new = green
+	commit = green bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+	newMoved = cyan
+	oldMoved = blue
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = "red bold 52"
+	newNormal = "green bold"
+	newHighlight = "green bold 22"
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
 [color "status"]
-	added = green
-	changed = yellow
-	untracked = red
+	added = yellow
+	changed = green
+	untracked = cyan
 
 [push]
 	default = current
+
+[fetch]
+	prune = true
 
 [url "git@github.com:segovia94/"]
 	insteadOf = "git://github.com/segovia94/"
@@ -50,3 +68,9 @@
 [core]
 	autocrlf = input
 	excludesfile = ~/.gitignore
+	attributesfile = ~/.gitattributes
+
+[diff]
+	# Show blocks of moved text of at least 20 alphanumeric characters differently than adds/deletes
+	# https://blog.github.com/2018-04-05-git-217-released/
+	colorMoved = zebra
