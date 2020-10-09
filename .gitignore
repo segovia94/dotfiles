@@ -1,27 +1,62 @@
-# Folder view configuration files
-.DS_Store
-Desktop.ini
+# Local config #
+################
+local.settings.php
+*.local.php
+*.local.yml
+*.local
 
-# Thumbnail cache files
-._*
+# Packages #
+############
+*.7z
+*.dmg
+*.gz
+*.bz2
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.tgz
+
+# Logs and databases #
+######################
+*.log
+*.sql
+
+# OS generated files #
+######################
+.DS_Store
+ehthumbs.db
 Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
 # Files that might appear on external disks
 .Spotlight-V100
 .Trashes
 
-# PHPStorm
-.idea
+# Vim generated files #
+######################
+*.un~
 
-# SASS
+# SASS #
+##########
 .sass-cache
 
-# Ignore Sass map files since they only work locally anyway
-*.css.map
-
-# Netbeans
+# Netbeans folder #
+###################
 nbproject
 nbproject/*
 
-# Ignore any directories with a .local ending. This means it is a symbolic link to a local site
-*.local
+# IDE Editor #
+############
+.idea
+.vscode
+
+# Dreamweaver #
+###############
+_notes
+dwsync.xml
+
+# Ignore map files since they only work locally anyway
+*.map
