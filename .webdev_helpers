@@ -1,0 +1,84 @@
+# Get a Drupal Lando File and set up renaming of site.
+# @param name - pass in a Site Name which will also be used as the domain.
+# Ex. get_lando_file "Test Site"
+function get_lando_file() {
+  FILE=$PWD/.lando.yml
+
+  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/.lando.yml -o $FILE
+
+  if (( $# == 1 ))
+  then
+    # Replace space with dash.
+    name="${1// /-}"
+    # Lowercase.
+    name="${name,,}"
+
+    # Replace site name and url.
+    sed -i "s/name: drupal/name: $name/" $FILE
+    sed -i "s/drupal.lndo/$name.lndo/" $FILE
+  fi  
+}
+
+# Move a site created by "lando composer" into the current directory
+# @param directory - pass in the directroy name to move the site from.
+# Ex. move_site newsite
+function move_site() {
+	mv $1/* $1/.[^.]* .
+	rm -rf $1/
+	echo "Site moved: rebuilding Lando"
+	lando rebuild -y
+}
+
+# Set up local configuration files for Drupal development.
+function drupal_local_settings() {
+  # services.local.yml
+  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/services.local.yml -o $PWD/web/sites/default/services.local.yml
+  # settings.local.php
+  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.local.php -o $PWD/web/sites/default/settings.local.php
+  # settings.php
+  FILE=$PWD/web/sites/default/settings.php
+  if [ ! -f "$FILE" ]; then
+    curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.php -o $FILE
+  else
+    echo "$FILE exists."
+
+    # Check to see if the local settings is already enabled.
+    if grep -Pq "(?<!(# ))if(.)+local.php" "$FILE"; then
+      echo "Local settings already enabled."
+    else
+      cat >> $FILE <<EOF
+
+if (file_exists(\$app_root . '/' . \$site_path . '/settings.local.php')) {
+  include \$app_root . '/' . \$site_path . '/settings.local.php';
+}
+EOF
+    fi
+  fi
+  echo "Your local Drupal config is setup."
+}
+
+# Install drupal via Drush.
+# @param name - pass in a Site Name which will also be used as the domain.
+# Ex. drupal_install "Test Site"
+function drupal_install() {
+  local name="${1:-New Site}"
+  echo $name
+  lando drush si standard --account-pass=admin --account-name=admin --site-name="$name" -y
+  lando drush uli
+}
+
+# Get Drupal via composer in lando https://github.com/drupal-composer/drupal-project
+alias get_drupal="lando composer create-project drupal-composer/drupal-project:9.x-dev newsite --no-interaction && move_site newsite"
+
+# Create a new Drupal site via Composer.
+# @param name - pass in a Site Name which will also be used as the domain.
+# Ex. new_drupal "Test Site"
+function new_drupal() {
+  get_lando_file "$1"
+  get_drupal
+  drupal_local_settings
+  drupal_install "$1"
+}
+
+# Install the Bedrock Wordpress build via composer in lando - https://roots.io/bedrock/
+alias get_wordpress='lando composer create-project roots/bedrock newsite && move_site newsite'

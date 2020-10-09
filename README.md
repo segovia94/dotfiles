@@ -10,6 +10,7 @@ This is shamelessly based on Paul Irish's dotfiles https://github.com/paulirish/
 * `.bash_profile`
 * `.bash_prompt`
 * `.functions`
+* `.webdev_helpers`
 * `.extra` - not included, explained below
 
 #### git

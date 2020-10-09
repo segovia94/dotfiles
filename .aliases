@@ -61,12 +61,5 @@ alias drush='lando drush'
 alias drupal='lando drupal'
 alias drupal='lando composer'
 
-# Drupal Helpers
-alias d8_install='drush si --account-pass=millertime --account-name=mark --site-name=drupal8'
-
 # Directory shortcuts
 alias web="cd ~/websites"
-alias zhuk="cd ~/websites/zhuk"
-
-# Install the Bedrock Wordpress build via composer in lando - https://roots.io/bedrock/
-alias get_wordpress='lando composer create-project roots/bedrock newsite && move_site newsite'
