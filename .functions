@@ -23,12 +23,22 @@ function la() {
     }'
 }
 
+# Copy w/ progress
+cp_p () {
+  rsync -WavP --human-readable --progress $1 $2
+}
+
 # get gzipped size
 function gz() {
 	echo "orig size    (bytes): "
 	cat "$1" | wc -c
 	echo "gzipped size (bytes): "
 	gzip -c "$1" | wc -c
+}
+
+# preview csv files. source: http://stackoverflow.com/questions/1875305/command-line-csv-viewer
+function csvpreview() {
+  sed 's/,,/, ,/g;s/,,/, ,/g' "$@" | column -s, -t | less -#2 -N -S
 }
 
 # direct it all to /dev/null

@@ -3,6 +3,7 @@
 local.settings.php
 *.local.php
 *.local.yml
+*.local
 
 # Packages #
 ############
@@ -52,5 +53,5 @@ nbproject/*
 _notes
 dwsync.xml
 
-# Ignore Sass map files since they only work locally anyway
-*.css.map
+# Ignore map files since they only work locally anyway
+*.map

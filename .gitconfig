@@ -15,8 +15,16 @@
 	cherry = cherry-pick
 	cp = cherry-pick
 
+	# show commit log of unique commits of this branch (not on master)
+	diffcommitsfrommaster = log --no-merges master..
+	# show unified diff of unique commits of this branch
+	difffrommaster = diff master...
+	# ^^^^ Holy crap two dots vs three dots, so important. https://stackoverflow.com/a/48681527
+
 	# Show the diff between the latest commit and the current state
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+	reup = rebase-update # depot_tools specific
 
 	# Merge GitHub pull request on top of the `master` branch
 	mpr = "!f() { \
@@ -55,18 +63,18 @@
 	changed = yellow
 	untracked = cyan
 
+# correct typos
+[help]
+	autocorrect = 1
+
 [push]
 	default = current
+	followTags = true
 
 [fetch]
 	prune = true
 
-[url "git@github.com:segovia94/"]
-	insteadOf = "git://github.com/segovia94/"
-	insteadOf = "https://github.com/segovia94/"
-
 [core]
-	autocrlf = input
 	excludesfile = ~/.gitignore
 	attributesfile = ~/.gitattributes
 
@@ -74,3 +82,13 @@
 	# Show blocks of moved text of at least 20 alphanumeric characters differently than adds/deletes
 	# https://blog.github.com/2018-04-05-git-217-released/
 	colorMoved = zebra
+
+[stash]
+	showPatch = true
+
+[log]
+	date = relative
+
+# use separate file for username / github token / etc
+[include]
+  path = ~/.gitconfig.local

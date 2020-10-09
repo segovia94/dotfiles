@@ -16,29 +16,25 @@ This is shamelessly based on Paul Irish's dotfiles https://github.com/paulirish/
 * `.gitconfig`
 * `.gitignore`
 
+
+## Edit per environment
+
 ### `.extra` for private configuration
 
 There will be items that don't belong to be committed to a git repo, because either 1) it shoudn't be the same across your machines or 2) it shouldn't be in a git repo. Kick it off like this:
 
-`touch ~/.extra && $EDITOR $_` 
+`touch ~/.extra` 
 
 You can add EXPORTS, PATH construction, aliases for ssh'ing into servers, and other stuff.
 
-```shell
-# The top-most paths override here.
-PATH=/usr/local/bin:$PATH
-PATH=$PATH:/Applications/MAMP/Library/bin
-PATH=$PATH:~/.rvm/bin
+### Local Git config
+Add a `.gitconfig.local` to store config like a username or github tokens
 
-export PATH
+`touch ~/.gitconfig.local` 
 
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
-```
-
-## Edit per environment
+### Bash Prompt
 The .bash_prompt file has a variable which needs to be changed per environment.
 
-`default_username='Mark'`
+`default_username='segovia94'`
 
 This should be changed to whatever the default system username is.
