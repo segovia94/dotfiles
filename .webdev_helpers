@@ -1,21 +1,33 @@
+#!/bin/bash
+
+function banner() {
+  local box=`tput sgr0``tput setaf 2`
+  local text=`tput bold``tput setaf 7`
+  local defaults=`tput sgr0`
+
+  echo "${box}+------------------------------------------+"
+  printf "|${text} %-40s ${box}|\n" "$@"
+  echo "+------------------------------------------+${defaults}"
+}
+
 # Get a Drupal Lando File and set up renaming of site.
 # @param name - pass in a Site Name which will also be used as the domain.
 # Ex. get_lando_file "Test Site"
 function get_lando_file() {
-  FILE=$PWD/.lando.yml
+  local FILE=$PWD/.lando.yml
 
-  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/.lando.yml -o $FILE
+  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/.lando.yml -o "$FILE"
 
   if (( $# == 1 ))
   then
     # Replace space with dash.
-    name="${1// /-}"
+    local name="${1// /-}"
     # Lowercase.
     name="${name,,}"
 
     # Replace site name and url.
-    sed -i "s/name: drupal/name: $name/" $FILE
-    sed -i "s/drupal.lndo/$name.lndo/" $FILE
+    sed -i "s/name: drupal/name: $name/" "$FILE"
+    sed -i "s/drupal.lndo/$name.lndo/" "$FILE"
   fi  
 }
 
@@ -32,27 +44,27 @@ function move_site() {
 # Set up local configuration files for Drupal development.
 function drupal_local_settings() {
   # services.local.yml
-  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/services.local.yml -o $PWD/web/sites/default/services.local.yml
+  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/services.local.yml -o "$PWD"/web/sites/default/services.local.yml
   # settings.local.php
-  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.local.php -o $PWD/web/sites/default/settings.local.php
-  # settings.php
-  FILE=$PWD/web/sites/default/settings.php
+  curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.local.php -o "$PWD"/web/sites/default/settings.local.php
+  # settings.php - copy it from the default.settings.php already provided by core.
+  local FILE=$PWD/web/sites/default/settings.php
   if [ ! -f "$FILE" ]; then
-    curl https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.php -o $FILE
+    cp "$PWD"/web/sites/default/default.settings.php "$FILE"
   else
-    echo "$FILE exists."
+    echo "$FILE already exists."
+  fi
 
-    # Check to see if the local settings is already enabled.
-    if grep -Pq "(?<!(# ))if(.)+local.php" "$FILE"; then
-      echo "Local settings already enabled."
-    else
-      cat >> $FILE <<EOF
+  # Check to see if the local settings is already enabled.
+  if grep -Pq "(?<!(# ))if(.)+local.php" "$FILE"; then
+    echo "Local settings already enabled."
+  else
+    cat >> "$FILE" <<EOF
 
 if (file_exists(\$app_root . '/' . \$site_path . '/settings.local.php')) {
-  include \$app_root . '/' . \$site_path . '/settings.local.php';
+include \$app_root . '/' . \$site_path . '/settings.local.php';
 }
 EOF
-    fi
   fi
   echo "Your local Drupal config is setup."
 }
@@ -62,7 +74,6 @@ EOF
 # Ex. drupal_install "Test Site"
 function drupal_install() {
   local name="${1:-New Site}"
-  echo $name
   lando drush si standard --account-pass=admin --account-name=admin --site-name="$name" -y
   lando drush uli
 }
@@ -71,13 +82,29 @@ function drupal_install() {
 alias get_drupal="lando composer create-project drupal-composer/drupal-project:9.x-dev newsite --no-interaction && move_site newsite"
 
 # Create a new Drupal site via Composer.
-# @param name - pass in a Site Name which will also be used as the domain.
-# Ex. new_drupal "Test Site"
 function new_drupal() {
-  get_lando_file "$1"
+  local white=`tput setaf 7`
+  local yellow=`tput setaf 3`
+
+  # Default the site name to the current directory and then ask for a new name.
+  local dirname=${PWD##*/}
+  read -p "Site Name ${yellow}[${dirname}]${white}: " name
+
+  local name="${name:-$dirname}"
+
+  echo $name
+
+  banner "Building a new Drupal site in Lando"
+  get_lando_file "$name"
+
+  banner "Getting Drupal code with Composer"
   get_drupal
+
+  banner "Adding local database settings"
   drupal_local_settings
-  drupal_install "$1"
+
+  banner "Installing site - $name"
+  drupal_install "$name"
 }
 
 # Install the Bedrock Wordpress build via composer in lando - https://roots.io/bedrock/

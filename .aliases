@@ -59,7 +59,7 @@ alias delete_npm='for package in `ls node_modules`; do sudo npm uninstall $packa
 # Lando Shortcuts
 alias drush='lando drush'
 alias drupal='lando drupal'
-alias drupal='lando composer'
+alias composer='lando composer'
 
 # Directory shortcuts
 alias web="cd ~/websites"
